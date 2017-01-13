@@ -2,7 +2,10 @@ services:
   - docker
 
 script:
-  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   - docker build -t marketreaction/mock-eoddata-webservice .
-  - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then docker push marketreaction/mock-eoddata-webservice; fi
+  - >
+    if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+      docker push marketreaction/mock-eoddata-webservice
+    fi
